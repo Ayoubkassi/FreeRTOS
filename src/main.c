@@ -8,33 +8,28 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-void vTask1(void *pvParameters);
-void vTask2(void *pvParameters);
+TaskHandle_t myTask1Handle = NULL;
+
+void myTask1(void *p)
+{
+    int count = 0;
+    while (1)
+    {
+        printf("Bissmi Allah : %d\r\n", count++);
+        vTaskDelay(1000);
+    }
+}
 
 int main(void)
 {
-    xTaskCreate(&vTask1, "Task 1", 1024, NULL, 1, NULL);
-    xTaskCreate(&vTask2, "Task 2", 1024, NULL, 1, NULL);
+    xTaskCreate(myTask1, "Task 1", 200, (void *)0, tskIDLE_PRIORITY, myTask1Handle);
 
     vTaskStartScheduler();
 
+    while (1)
+    {
+        //here code to execute
+    }
+
     return 0;
-}
-
-void vTask1(void *pvParameters)
-{
-    for (;;)
-    {
-        printf("Task 1\r\n");
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-}
-
-void vTask2(void *pvParameters)
-{
-    for (;;)
-    {
-        printf("Task 2\r\n");
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
 }
